@@ -28,11 +28,21 @@ def save_file():
 window = tk.Tk()
 window.title("Простой текстовый редактор")
 
-window.rowconfigure(0, minsize=600, weight=1)  # установки минимальной высоты строки 800 пикселей
-window.columnconfigure(1, minsize=800, weight=1)  # установки минимальной ширины столбца 800 пикселей
+# window.rowconfigure(0, minsize=600, weight=1)  # установки минимальной высоты строки 800 пикселей
+# window.columnconfigure(1, minsize=800, weight=1)  # установки минимальной ширины столбца 800 пикселей
+window.rowconfigure(0, weight=1)  # если minsize не указано, то высоту текстового поля можно будет менять полностью
+window.columnconfigure(1, weight=1)  # если minsize не указано, то ширину текстового поля можно будет менять полностью
 
 sb_vertical = tk.Scrollbar(window, orient=tk.VERTICAL)  # добавление вертикальной полосы прокрутки
+
 txt_edit = tk.Text(window, yscrollcommand=sb_vertical.set)  # создание текстового поля в окне и связывание с прокруткой
+"""
+дополнительные параметры виджета Text:
+height = int:screen_units - устанавливает начальную высоту поля, по умолчанию стоит что-то около 30
+height = int:screen_units - устанавливает начальную ширину поля, по умолчанию стоит что-то около 100
+wrap=str: 'word', 'char', 'none' - управляет переносом строки, по умолчанию стоит char, т.е. по символам
+"""
+
 sb_vertical.config(command=txt_edit.yview)  # определение действия для полосы прокрутки
 fr_buttons = tk.Frame(window)  # создание фрейма кнопок в окне
 btn_open = tk.Button(fr_buttons, text="Открыть", command=open_file)  # создание кнопки в фрейме кнопок
