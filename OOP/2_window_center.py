@@ -21,7 +21,7 @@ class Example(tk.Frame):
 
 def main():
     root = tk.Tk()  # создаем корневое окно
-    app = Example(root)  # Инициализация класса приложения
+    Example(root)  # Инициализация класса приложения
     root.mainloop()  # запуск основного цикла
 
 
