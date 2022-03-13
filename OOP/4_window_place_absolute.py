@@ -4,12 +4,13 @@ import tkinter.ttk as ttk
 
 
 class Example(ttk.Frame):
-    def __init__(self):
-        super().__init__()  # вызов конструктора родительского класса
+    def __init__(self, parent):
+        ttk.Frame.__init__(self, parent)  # вызов конструктора родительского класса
+        self.parent = parent
         self.init_ui()
 
     def init_ui(self):
-        self.master.title('Absolute positioning')
+        self.parent.title('Absolute positioning')
         self.pack(fill=tk.BOTH, expand=1)
         ttk.Style().configure("TFrame", background="#333")  # изменение цвета фона виджета при помощи стиля
         bard = Image.open('bardejov.jpg')  # создание объекта изображения
@@ -32,7 +33,7 @@ class Example(ttk.Frame):
 def main():
     root = tk.Tk()
     root.geometry('300x280+300+300')
-    Example()
+    Example(root)
     root.mainloop()
 
 
