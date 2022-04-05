@@ -66,40 +66,41 @@ class Example(ttk.Frame):
         equ.grid(row=5, column=2)
         pls = ttk.Button(self, text='+')
         pls.grid(row=5, column=3)
-
         self.pack()
 
     def enter_1(self):
-        self.entry.insert(tk.END, '1')
+        self.enter_digit('1')
 
     def enter_2(self):
-        self.entry.insert(tk.END, '2')
+        self.enter_digit('2')
 
     def enter_3(self):
-        self.entry.insert(tk.END, '3')
+        self.enter_digit('3')
 
     def enter_4(self):
-        self.entry.insert(tk.END, '4')
+        self.enter_digit('4')
 
     def enter_5(self):
-        self.entry.insert(tk.END, '5')
+        self.enter_digit('5')
 
     def enter_6(self):
-        self.entry.insert(tk.END, '6')
+        self.enter_digit('6')
 
     def enter_7(self):
-        self.entry.insert(tk.END, '7')
+        self.enter_digit('7')
 
     def enter_8(self):
-        self.entry.insert(tk.END, '8')
+        self.enter_digit('8')
 
     def enter_9(self):
-        self.entry.insert(tk.END, '9')
+        self.enter_digit('9')
 
     def enter_0(self):
-        self.entry.insert(tk.END, '0')
+        self.enter_digit('0')
 
     def neg_pos(self):
+        if not self.entry.get():
+            return
         if self.entry.get()[0] == '-':
             self.entry.delete(0)
         else:
@@ -119,10 +120,16 @@ class Example(ttk.Frame):
     def delete(self):
         self.entry.delete(len(self.entry.get()) - 1)
 
+    def enter_digit(self, digit):
+        if digit != '0':
+            self.entry.insert(tk.END, digit)
+        elif self.entry.get():
+            self.entry.insert(tk.END, '0')
+
 
 def main():
     root = tk.Tk()
-    app = Example(root)
+    Example(root)
     root.mainloop()
 
 
