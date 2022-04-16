@@ -7,6 +7,14 @@ class Example(ttk.Frame):
         ttk.Frame.__init__(self, parent)  # вызов конструктора родительского класса
         self.parent = parent  # сохранение ссылки на основное окно
         self.entry = ttk.Entry(self, font=('serif', 12), justify=tk.RIGHT)  # создание текстового однострочного поля
+        self.entry.insert(tk.END, '0')  # базовый ноль на экране
+        self.memory = 0  # создание ячейки памяти, в качестве 2-ой ячейки будет entry
+        self.clear_screen = True
+        self.action = ''  # создание указателя на действие
+        self.action_case = {'/': lambda x, y: x / y,  # набор действий
+                            '*': lambda x, y: x * y,
+                            '+': lambda x, y: x + y,
+                            '-': lambda x, y: x - y}
         self.init_ui()  # инициализация интерфейса
 
     def init_ui(self):
@@ -40,7 +48,7 @@ class Example(ttk.Frame):
         eig.grid(row=2, column=1)
         nin = ttk.Button(self, text='9', command=self.enter_9)
         nin.grid(row=2, column=2)
-        div = ttk.Button(self, text='/')
+        div = ttk.Button(self, text='/', command=self.division)
         div.grid(row=2, column=3)
         fou = ttk.Button(self, text='4', command=self.enter_4)
         fou.grid(row=3, column=0)
@@ -48,7 +56,7 @@ class Example(ttk.Frame):
         fiv.grid(row=3, column=1)
         six = ttk.Button(self, text='6', command=self.enter_6)
         six.grid(row=3, column=2)
-        mul = ttk.Button(self, text='*')
+        mul = ttk.Button(self, text='*', command=self.multiplication)
         mul.grid(row=3, column=3)
         one = ttk.Button(self, text='1', command=self.enter_1)
         one.grid(row=4, column=0)
@@ -56,15 +64,15 @@ class Example(ttk.Frame):
         two.grid(row=4, column=1)
         thr = ttk.Button(self, text='3', command=self.enter_3)
         thr.grid(row=4, column=2)
-        mns = ttk.Button(self, text='-')
+        mns = ttk.Button(self, text='-', command=self.subtraction)
         mns.grid(row=4, column=3)
         zer = ttk.Button(self, text='0', command=self.enter_0)
         zer.grid(row=5, column=0)
         dot = ttk.Button(self, text='.', command=self.enter_dot)
         dot.grid(row=5, column=1)
-        equ = ttk.Button(self, text='=')
+        equ = ttk.Button(self, text='=', command=self.equally)
         equ.grid(row=5, column=2)
-        pls = ttk.Button(self, text='+')
+        pls = ttk.Button(self, text='+', command=self.addition)
         pls.grid(row=5, column=3)
         self.pack()
 
@@ -115,16 +123,51 @@ class Example(ttk.Frame):
             self.entry.insert(tk.END, '0.')
 
     def clear(self):
-        self.entry.delete(0, tk.END)
+        self.entry.delete(0, tk.END)  # очистка экрана
+        self.entry.insert(tk.END, '0')  # базовый ноль на экране
+        self.memory = 0  # очистка памяти
+        self.action = ''  # очистка указателя операций
 
     def delete(self):
-        self.entry.delete(len(self.entry.get()) - 1)
+        self.entry.delete(len(self.entry.get()) - 1)  # удаление последнего символа
 
-    def enter_digit(self, digit):
+    def division(self):
+        self.actions('/')
+
+    def multiplication(self):
+        self.actions('*')
+
+    def subtraction(self):
+        self.actions('-')
+
+    def addition(self):
+        self.actions('+')
+
+    def equally(self):
+        self.actions()
+
+    def enter_digit(self, digit):  # FIXME ошибка при вводе, когда self.action пустой не происходит очистка экрана
+        if self.entry.get() == '0' or self.clear_screen:
+            self.entry.delete(0, tk.END)
+            self.clear_screen = False
         if digit != '0':
             self.entry.insert(tk.END, digit)
         elif self.entry.get():
             self.entry.insert(tk.END, '0')
+
+    def actions(self, op=''):
+        if self.action:
+            self.memory = self.action_case[self.action](self.memory, float(self.entry.get()))
+            if self.memory % 1 == 0:
+                self.memory = int(self.memory)
+            self.entry.delete(0, tk.END)
+            self.entry.insert(tk.END, self.memory)
+            self.action = op
+            self.clear_screen = True
+            return
+        self.action = op
+        self.memory = float(self.entry.get())
+        self.clear_screen = True
 
 
 def main():
