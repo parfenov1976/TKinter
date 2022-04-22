@@ -1,3 +1,8 @@
+"""
+Пример создания главного окна и расположение его по центру экрана с помощью метода geometry()
+geometry('WIDTHxHEIGHT+X+Y')
+"""
+
 import tkinter as tk
 
 
@@ -10,6 +15,9 @@ class Example(tk.Frame):
         self.center_window()  # вызываем метод, создающий пользовательский интерфейс
 
     def center_window(self):
+        """
+        Центрирование окна
+        """
         w = 290  # ширина нашего окна
         h = 150  # высота нашего окна
         sw = self.parent.winfo_screenwidth()  # определяем ширину экрана для текущего разрешения

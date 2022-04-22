@@ -1,3 +1,7 @@
+"""
+Пример создания события и привязки его к виджету кнопки с помощью метода bind
+Закомментирован пример привязки события к нажатию кнопки на клавиатуре
+"""
 import tkinter as tk
 
 window = tk.Tk()
@@ -10,7 +14,7 @@ window = tk.Tk()
 #
 # window.bind("<Key>", handle_keypress)
 # ___________2 - Нажатие на виджет кнопки
-def handle_keypress(event):
+def handle_keypress(event):  # event нужен, без него будет вызвано исключение
     print("Нажата кнопка")
 
 

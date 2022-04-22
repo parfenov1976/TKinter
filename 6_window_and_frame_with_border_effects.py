@@ -1,3 +1,6 @@
+"""
+Пример различных эффектов рельефа для границы виджета Frame
+"""
 import tkinter as tk
 
 border_effects = {

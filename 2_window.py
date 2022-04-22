@@ -1,3 +1,6 @@
+"""
+Пример создания меток с помощью виджета Label
+"""
 import tkinter as tk
 
 window = tk.Tk()

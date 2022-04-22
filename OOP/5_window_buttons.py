@@ -1,3 +1,6 @@
+"""
+Пример использования виджетов кнопок
+"""
 import tkinter as tk
 import tkinter.ttk as ttk
 

@@ -1,3 +1,7 @@
+"""
+Пример расположение картинок в главной рамке по абсолютным координатам помощью менеджера
+геометрии place
+"""
 from PIL import Image, ImageTk
 import tkinter as tk
 import tkinter.ttk as ttk

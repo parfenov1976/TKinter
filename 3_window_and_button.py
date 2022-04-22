@@ -1,3 +1,6 @@
+"""
+Пример применения виджета Button
+"""
 import tkinter as tk
 
 window = tk.Tk()

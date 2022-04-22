@@ -1,3 +1,6 @@
+"""
+Пример создания главного окна и использования виджета Label
+"""
 import tkinter as tk
 
 window = tk.Tk()

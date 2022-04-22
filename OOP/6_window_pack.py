@@ -1,3 +1,6 @@
+"""
+Пример применения менеджера геометрии pack
+"""
 import tkinter as tk
 import tkinter.ttk as ttk
 
