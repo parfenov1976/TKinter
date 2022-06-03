@@ -33,9 +33,13 @@ class Example(Frame):
         self.frame.place(x=160, y=30)  # размещение рамки для выбранного цвета по координатам для левого верхнего угла
 
     def on_choose(self):
-        (rgb, hx) = colorchooser.askcolor()
+        """
+        Метод для вызова диалогового окна выбора цвета из палитры
+        """
+        (rgb, hx) = colorchooser.askcolor()  # вызов диалогового окна выбора цвета
+        # возвращает кортеж кодов цвета (rgb) или hex-код цвета (hx)
         print(rgb, hx)
-        self.frame.config(bg=hx)
+        self.frame.config(bg=hx)  # передача кода цвета в конфигурацию рамки для установки цвета фона
 
 
 def main():
