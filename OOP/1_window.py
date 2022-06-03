@@ -6,7 +6,7 @@ import tkinter as tk
 
 class Example(tk.Frame):
     def __init__(self, parent):
-        tk.Frame.__init__(self, parent, background="white")  # создаем кадр в корневом окне, переданном по ссылке
+        tk.Frame.__init__(self, background="white")  # создаем кадр в корневом окне, переданном по ссылке
         self.parent = parent  # сохраняем ссылку на родительский виджет, которым является корневое окно
         self.init_ui()  # вызываем метод, создающий пользовательский интерфейс
 

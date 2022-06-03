@@ -7,7 +7,7 @@ from tkinter.ttk import Frame, Button, Label
 
 class Example(Frame):
     def __init__(self, parent):
-        Frame.__init__(self, parent)  # вызов конструктора родительского класса
+        Frame.__init__(self)  # вызов конструктора родительского класса
         self.parent = parent  # сохранение ссылки на основное окно
         self.init_ui()  # вызов метода построения интерфейса
 

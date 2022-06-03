@@ -7,7 +7,7 @@ import tkinter.ttk as ttk
 
 class Example(ttk.Frame):
     def __init__(self, parent):
-        ttk.Frame.__init__(self, parent)  # создаем кадр в корневом окне, переданном по ссылке
+        ttk.Frame.__init__(self)  # создаем кадр в корневом окне, переданном по ссылке
         self.parent = parent  # сохраняем ссылку на родительский виджет, которым является корневое окно
         self.style = ttk.Style()  # создаем стили для виджетов
         self.style.theme_use("default")  # применяем к виджетам стиль по умолчанию (есть еще стили alt и classic)

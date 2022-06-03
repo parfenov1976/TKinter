@@ -7,7 +7,7 @@ from tkinter import Tk, Frame, Checkbutton, BooleanVar, BOTH, Label
 
 class Example(Frame):
     def __init__(self, parent):
-        Frame.__init__(self, parent)  # вызов конструктора родительского класса для создания рамки
+        Frame.__init__(self)  # вызов конструктора родительского класса для создания рамки
         self.parent = parent  # сохранение ссылки на основное окно
         self.var = BooleanVar()  # создаем объект логических значений для чекбокса
         self.var1 = BooleanVar()
