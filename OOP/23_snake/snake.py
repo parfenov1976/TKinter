@@ -28,13 +28,14 @@ class Board(tk.Canvas):
     """
     Класс игрового поля на основе супер класса холст (Canvas)
     """
+
     def __init__(self) -> None:
         """
         Конструктор класс игрового поля
         """
-        super().__init__(                                       # вызов конструктора родительского класса
-            width=Cons.BOARD_WIDTH, height=Cons.BOARD_HEIGHT,   # передача размеров игрового поля в конструктор холста
-            background='blue', highlightthickness=0             # указание цвета игрового поля и ширины рамки
+        super().__init__(  # вызов конструктора родительского класса
+            width=Cons.BOARD_WIDTH, height=Cons.BOARD_HEIGHT,  # передача размеров игрового поля в конструктор холста
+            background='blue', highlightthickness=0  # указание цвета игрового поля и ширины рамки
         )
         self.in_game = True
         self.dots = 3
@@ -73,13 +74,13 @@ class Board(tk.Canvas):
         """
         Метод создание объектов на холсте
         """
-        self.create_text(                        # метод холста для создания текста на нем
+        self.create_text(  # метод холста для создания текста на нем
             30, 10, text=f'Счет: {self.score}',  # координаты текстового поля, строка для текстового поля
-            tags='score', fill='white'           # метка текстового поля и цвет шрифта
+            tags='score', fill='white'  # метка текстового поля и цвет шрифта
         )
-        self.create_image(                                  # метода холста для создания изображения на нем
-            self.apple_x, self.apple_y, image=self.apple,   # координаты изображения и аттрибут с изображением
-            anchor=tk.NW, tag='apple'                       # привязка изображения, метка изображения
+        self.create_image(  # метода холста для создания изображения на нем
+            self.apple_x, self.apple_y, image=self.apple,  # координаты изображения и аттрибут с изображением
+            anchor=tk.NW, tag='apple'  # привязка изображения, метка изображения
         )
         self.create_image(50, 50, image=self.head, anchor=tk.NW, tag="head")  # отрисовка головы змейки
         self.create_image(30, 50, image=self.dot, anchor=tk.NW, tag="dot")  # отрисовка элемента тела змейки
@@ -115,7 +116,7 @@ class Board(tk.Canvas):
             """
             c1 = self.coords(items[z])  # извлечение координат текущего элемента
             c2 = self.coords(items[z + 1])  # извлечение координат следующего элемента
-            self.move(items[z], c2[0]-c1[0], c2[1]-c1[1])  # перемещение текущего элемента
+            self.move(items[z], c2[0] - c1[0], c2[1] - c1[1])  # перемещение текущего элемента
             z += 1  # увеличение индекса
         self.move(head, self.move_x, self.move_y)  # изменение направления движения змейки после
         # после каждого нажатия клавиш
@@ -127,16 +128,59 @@ class Board(tk.Canvas):
         dots = self.find_withtag('dot')  # находим тело змейки на холсте методом холста по тэгу картинки
         head = self.find_withtag('head')  # находим голову змейки на холсте методом холста по тэгу картинки
         x1, y1, x2, y2 = self.bbox(head)  # извлечение точек границ изображения головы и присвоение их переменным
-        overlap = self.find_overlapping(x1, y1, x2, y2)
-        for dot in dots: pass
-        # TODO: с этого места
+        overlap = self.find_overlapping(x1, y1, x2, y2)  # создание перечня изображений на которые
+        # накладывается изображение головы
+        for dot in dots:  # перебор элементов тела
+            for over in overlap:  # перебор элементов перечня наложения
+                if over == dot:  # проверка равенства элемента тела и элемента из списка наложения
+                    self.in_game = False  # флаг продолжения игры
+        if x1 < 0:  # условие столкновения головы с левой границей поля
+            self.in_game = False  # флаг продолжения игры
+        if x1 > Cons.BOARD_WIDTH - Cons.DOT_SIZE:  # условие столкновения головы с правой границей поля
+            self.in_game = False  # флаг продолжения игры
+        if y1 < 0:  # условие столкновения головы с верхней границей поля
+            self.in_game = False  # флаг продолжения игры
+        if y1 > Cons.BOARD_HEIGHT - Cons.DOT_SIZE:  # условие столкновения головы с нижней границей поля
+            self.in_game = False  # флаг продолжения игры
 
     def locate_apple(self) -> None:
         """
-        Метода распределения яблок по холсту устанавливает новое яблоко в случайной точке
+        Метода распределения яблок по холсту - устанавливает новое яблоко в случайной точке
         и удаляет старое яблоко с игровой карты
         """
         apple = self.find_withtag('apple')  # находим изображение яблоко на холсте по тэгу
         self.delete(apple[0])  # удаляем яблоко с игрового поля методом холста delete()
         r = random.randint(0, Cons.MAX_RAND_POS)
         self.apple_x = r * Cons.DOT_SIZE
+        r = random.randint(0, Cons.MAX_RAND_POS)
+        self.apple_y = r * Cons.DOT_SIZE
+        self.create_image(  # метода холста для создания изображения на нем
+            self.apple_x, self.apple_y, image=self.apple,  # координаты изображения и аттрибут с изображением
+            anchor=tk.NW, tag='apple'  # привязка изображения, метка изображения
+        )
+
+    def on_key_pressed(self, e: tk.Event) -> None:
+        """
+        Метод управления змейкой с помощью стрелок клавиатуры
+        """
+        left_cursor_key = 'Left'  # создание переменной для хранения соответствия клавише
+        right_cursor_key = 'Right'
+        up_cursor_key = 'Up'
+        down_cursor_key = 'Down'
+        key = e.keysym  # извлечение строки названия нажатой клавиши из объекта события
+        if key == left_cursor_key and self.move_x <= 0:  # проверка соответствия названия нажатой клавиши и переменной
+            # проверка координаты обеспечивает продолжение безостановочное движения когда клавиша отпущена
+            self.move_x = -Cons.DOT_SIZE  # изменение координаты объекта
+            self.move_y = 0
+        if key == right_cursor_key and self.move_x >= 0:
+            self.move_x = Cons.DOT_SIZE
+            self.move_y = 0
+        if key == up_cursor_key and self.move_y <= 0:
+            self.move_x = 0
+            self.move_y = -Cons.DOT_SIZE
+        if key == down_cursor_key and self.move_y >= 0:
+            self.move_x = 0
+            self.move_y = Cons.DOT_SIZE
+
+    def on_timer(self) -> None:
+        pass
