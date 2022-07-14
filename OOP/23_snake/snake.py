@@ -204,7 +204,7 @@ class Board(tk.Canvas):
         score = self.find_withtag('score')
         self.itemconfig(*score, text=f'Счёт: {self.score}')
 
-    def game_over(self):
+    def game_over(self) -> None:
         """
         Метод завершения игры - удаляет все объекты и выводит сообщение об окончании игры
         """
@@ -220,7 +220,7 @@ class Snake(tk.Frame):
     Класс приложения с наследованием от супер класса рамки
     """
 
-    def __init__(self, parent):
+    def __init__(self, parent: tk.Tk) -> None:
         """
         Конструктор класса приложения
         """
@@ -231,7 +231,7 @@ class Snake(tk.Frame):
         self.pack()  # размещение рамки приложения в главном окне
 
 
-def main():
+def main() -> None:
     """
     Функция с кодом приложения верхнего уровня
     """
