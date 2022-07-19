@@ -38,6 +38,8 @@ class Board(tk.Canvas):
             background='blue', highlightthickness=0  # указание цвета игрового поля и ширины рамки
         )
         self.in_game = True
+        self.game_pause = False
+        self.timer_id = None
         self.dots = 3
         self.score = 0
         # переменные для передвижения змеи
@@ -168,6 +170,7 @@ class Board(tk.Canvas):
         right_cursor_key = 'Right'
         up_cursor_key = 'Up'
         down_cursor_key = 'Down'
+        esc = 'Escape'
         key = e.keysym  # извлечение строки названия нажатой клавиши из объекта события
         if key == left_cursor_key and self.move_x <= 0:  # проверка соответствия названия нажатой клавиши и переменной
             # проверка координаты обеспечивает продолжение безостановочное движения когда клавиша отпущена
@@ -182,20 +185,36 @@ class Board(tk.Canvas):
         if key == down_cursor_key and self.move_y >= 0:
             self.move_x = 0
             self.move_y = Cons.DOT_SIZE
+        if key == esc:
+            self.game_pause = not self.game_pause
+            self.pause_menu()
 
     def on_timer(self) -> None:
         """
         Метод для создания игрового цикла для каждого события таймера
         """
-        self.draw_score()  # вызов метода отрисовки счета
-        self.check_collisions()  # вызов метода проверки столкновений змейки с другими объектами
         if self.in_game:  # проверка условия продолжения игры
+            self.draw_score()  # вызов метода отрисовки счета
+            self.check_collisions()  # вызов метода проверки столкновений змейки с другими объектами
             self.check_apple_collision()  # вызов метода проверки столкновения головы змейки с яблоком
             self.move_snake()  # вызов метода перемещения змейки
-            self.after(Cons.DELAY, self.on_timer)  # метод холста?, который запускает метод после истечения таймера
-            # один раз, поэтому вызывается рекурсивно в методе on_timer()
+            self.timer_id = self.after(Cons.DELAY, self.on_timer)  # метод холста?, который запускает метод после
+            # истечения таймера один раз, поэтому вызывается рекурсивно в методе on_timer()
+            # self.after() возвращает id запланированной к запуску функции
         else:
             self.game_over()  # вызов метода завершения игры если условие продолжения игры ложь
+
+    def pause_menu(self):
+        if self.game_pause and self.in_game:
+            self.after_cancel(self.timer_id)  # отмена запуска запланированной функции
+            self.create_text(  # метод холста для создания текста на нем
+                self.winfo_width() / 2, self.winfo_height() / 2,  # координаты текстового поля
+                text=f'Счет: {self.score}\n\n ПАУЗА',  # строка для текстового поля
+                tags='pause', fill='white'  # метка текстового поля и цвет шрифта
+            )
+        else:
+            self.delete('pause')
+            self.after(Cons.DELAY, self.on_timer)  # перезапуск игрового цикла
 
     def draw_score(self) -> None:
         """
@@ -237,6 +256,7 @@ def main() -> None:
     """
     root = tk.Tk()  # создание главного окна приложения
     Snake(root)  # создание объекта приложения с передачей ссылки на главное окно приложения
+    root.resizable(False, False)  # запрет на изменение размеров окна
     root.mainloop()  # запуск главного цикла приложения
 
 
