@@ -1,9 +1,14 @@
 """
 Пример создания выпадающего списка
 """
-
+import time
 import tkinter as tk
 import tkinter.ttk as ttk
+
+
+def relabel(event):
+    lbl['text'] = combo.get()
+
 
 root = tk.Tk()
 root.title('Выпадающий список')
@@ -12,7 +17,7 @@ combo = ttk.Combobox(root)
 combo['values'] = (1, 2, 3, 4, 5, 'Текст')
 combo.current(5)
 combo.pack(anchor=tk.NW)
-combo.bind()
-# TODO разобраться с получением выбранного из виджета
-tk.Label(root, text='select').pack(padx=100, pady=100)
+lbl = tk.Label(root, text=combo.get())
+lbl.pack(padx=100, pady=100)
+combo.bind("<<ComboboxSelected>>", relabel)
 root.mainloop()
