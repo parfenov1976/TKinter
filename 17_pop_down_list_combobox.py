@@ -1,23 +1,31 @@
 """
 Пример создания выпадающего списка
 """
-import time
 import tkinter as tk
 import tkinter.ttk as ttk
 
 
 def relabel(event):
+    """
+    Метод перезаписи содержимого ярлыка на выбранное значение.
+    :param event: событие для обработки, нужно передавить для обеспечения вызова данного метода
+    если не передать event то данный метод не будет вызван
+    в самом объекте event нет ничего полезного
+    """
     lbl['text'] = combo.get()
 
 
-root = tk.Tk()
-root.title('Выпадающий список')
-root.geometry('400x250')
-combo = ttk.Combobox(root)
-combo['values'] = (1, 2, 3, 4, 5, 'Текст')
-combo.current(5)
-combo.pack(anchor=tk.NW)
-lbl = tk.Label(root, text=combo.get())
-lbl.pack(padx=100, pady=100)
-combo.bind("<<ComboboxSelected>>", relabel)
-root.mainloop()
+root = tk.Tk()  # создание главного окна приложения
+root.title('Выпадающий список')  # присвоение имени главному окну приложения
+root.geometry('400x250')  # установка размера окна приложения
+combo = ttk.Combobox(root, state='readonly')  # создание виджета выпадающего списка
+# combo = ttk.Combobox(root, state='readonly', postcommand=relabel)
+# postcommand вызывает функцию в момент раскрытия списка
+combo['values'] = (1, 2, 3, 4, 5, 'Текст')  # создание содержимого выпадающего списка
+combo.current(5)  # установка значения по умолчанию
+combo.pack(anchor=tk.NW)  # размещение виджета выпадающего списка в главном окне
+lbl = tk.Label(root, text=combo.get())  # создание ярлыка для вывода выбранного
+lbl.pack(padx=100, pady=100)  # размещение ярлыка в окне главного приложения
+combo.bind("<<ComboboxSelected>>", relabel)  # создание события при совершении выбора и вызов метода relabel
+# с передачей ему объекта события
+root.mainloop()  # запуск основного цикла главного окна приложения
