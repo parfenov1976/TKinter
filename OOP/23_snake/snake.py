@@ -17,10 +17,10 @@ class Cons:
     """
     Класс для хранения констант игры
     """
-    BOARD_WIDTH = 300  # ширина игрового поля
-    BOARD_HEIGHT = 300  # высота игрового поля
+    BOARD_WIDTH = 600  # ширина игрового поля
+    BOARD_HEIGHT = 600  # высота игрового поля
     DELAY = 100  # величина задержки для регулировки скорости игры
-    DOT_SIZE = 10  # размер элементов игры на игровом поле
+    DOT_SIZE = 20  # размер элементов игры на игровом поле
     MAX_RAND_POS = 27  # константа для ограничения части поля, на котором может появиться яблоко
 
 
@@ -46,8 +46,8 @@ class Board(tk.Canvas):
         self.move_x = Cons.DOT_SIZE
         self.move_y = 0
         # стартовые координаты для размещения яблока
-        self.apple_x = 100
-        self.apple_y = 190
+        self.apple_x = 160
+        self.apple_y = 80
         try:  # перехват ошибки на случай проблем с загрузкой изображений
             self.idot = PIL.Image.open(r'data\dot.png')  # создание объекта изображения из файла
             self.dot = PIL.ImageTk.PhotoImage(self.idot)  # создание фотоизображения из объекта изображения
@@ -55,10 +55,14 @@ class Board(tk.Canvas):
             self.head = PIL.ImageTk.PhotoImage(self.ihead)  # создание фотоизображения из объекта изображения
             self.iapple = PIL.Image.open(r'data\apple.png')  # создание фотоизображения из объекта изображения
             self.apple = PIL.ImageTk.PhotoImage(self.iapple)  # создание фотоизображения из объекта изображения
+            self.igrass = PIL.Image.open(r'data\grass.png')
+            self.grass = PIL.ImageTk.PhotoImage(self.igrass)
         except IOError as e:  # перехват ошибки ввода/вывода на случай проблем с загрузкой изображений
             print(e)  # печать сообщения об ошибке
             sys.exit(1)  # команда на завершение сценария со статусом 1 - ошибка
         self.init_game()  # вызов метода инициализации игры
+        # FIXME убрать текстуру игрового поля на задний фон
+        self.create_image(0, 0, anchor=tk.NW, image=self.grass)
         self.pack()  # размещение игрового поля в главной рамке приложения, см класс приложения Snake
 
     def init_game(self) -> None:
@@ -84,9 +88,9 @@ class Board(tk.Canvas):
             self.apple_x, self.apple_y, image=self.apple,  # координаты изображения и аттрибут с изображением
             anchor=tk.NW, tag='apple'  # привязка изображения, метка изображения
         )
-        self.create_image(50, 50, image=self.head, anchor=tk.NW, tag="head")  # отрисовка головы змейки
-        self.create_image(30, 50, image=self.dot, anchor=tk.NW, tag="dot")  # отрисовка элемента тела змейки
-        self.create_image(40, 50, image=self.dot, anchor=tk.NW, tag="dot")  # отрисовка элемента тела змейки
+        self.create_image(100, 100, image=self.head, anchor=tk.NW, tag="head")  # отрисовка головы змейки
+        self.create_image(80, 100, image=self.dot, anchor=tk.NW, tag="dot")  # отрисовка элемента тела змейки
+        self.create_image(60, 100, image=self.dot, anchor=tk.NW, tag="dot")  # отрисовка элемента тела змейки
 
     def check_apple_collision(self) -> None:
         """
@@ -100,7 +104,6 @@ class Board(tk.Canvas):
             if apple[0] == ovr:  #
                 self.score += 1  # увеличение счета если яблоко было съедено
                 x, y = self.coords(apple)  # извлечение координат яблока
-                print(self.coords(apple))
                 self.create_image(x, y, image=self.dot, anchor=tk.NW, tag='dot')  # добавление сегмента
                 # в тело змейки, если яблоко было съедено по координатам яблока
                 self.locate_apple()  # вызов метода замены яблока
