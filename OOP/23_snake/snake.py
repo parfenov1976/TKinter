@@ -55,14 +55,10 @@ class Board(tk.Canvas):
             self.head = PIL.ImageTk.PhotoImage(self.ihead)  # создание фотоизображения из объекта изображения
             self.iapple = PIL.Image.open(r'data\apple.png')  # создание фотоизображения из объекта изображения
             self.apple = PIL.ImageTk.PhotoImage(self.iapple)  # создание фотоизображения из объекта изображения
-            self.igrass = PIL.Image.open(r'data\grass.png')
-            self.grass = PIL.ImageTk.PhotoImage(self.igrass)
         except IOError as e:  # перехват ошибки ввода/вывода на случай проблем с загрузкой изображений
             print(e)  # печать сообщения об ошибке
             sys.exit(1)  # команда на завершение сценария со статусом 1 - ошибка
         self.init_game()  # вызов метода инициализации игры
-        # FIXME убрать текстуру игрового поля на задний фон
-        self.create_image(0, 0, anchor=tk.NW, image=self.grass)
         self.pack()  # размещение игрового поля в главной рамке приложения, см класс приложения Snake
 
     def init_game(self) -> None:
