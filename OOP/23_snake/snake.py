@@ -58,8 +58,8 @@ class Board(tk.Canvas):
         except IOError as e:  # перехват ошибки ввода/вывода на случай проблем с загрузкой изображений
             print(e)  # печать сообщения об ошибке
             sys.exit(1)  # команда на завершение сценария со статусом 1 - ошибка
-        self.init_game()  # вызов метода инициализации игры
         self.pack()  # размещение игрового поля в главной рамке приложения, см класс приложения Snake
+        self.init_game()  # вызов метода инициализации игры
 
     def init_game(self) -> None:
         """
@@ -170,6 +170,7 @@ class Board(tk.Canvas):
         up_cursor_key = 'Up'
         down_cursor_key = 'Down'
         esc = 'Escape'
+        space = 'space'
         key = e.keysym  # извлечение строки названия нажатой клавиши из объекта события
         if key == left_cursor_key and self.move_x <= 0:  # проверка соответствия названия нажатой клавиши и переменной
             # проверка координаты обеспечивает продолжение безостановочное движения когда клавиша отпущена
@@ -187,6 +188,8 @@ class Board(tk.Canvas):
         if key == esc:
             self.game_pause = not self.game_pause
             self.pause_menu()
+        if key == space and not self.in_game:
+            self.new_game()
 
     def on_timer(self) -> None:
         """
@@ -228,9 +231,14 @@ class Board(tk.Canvas):
         """
         self.delete(tk.ALL)  # метод холста для удаления всех объектов с него
         self.create_text(self.winfo_width() / 2, self.winfo_height() / 2,
-                         text=f'Игра закончена со счетом {self.score}', fill='white')
+                         text=f'{" "*12}Игра закончена со счетом {self.score}\n\nнажмите Пробел для начала новой игры',
+                         tags='game_over', fill='white')
         # Создание сообщения об окончании игры с помощью метода холста.
         # Извлечение размеров окна с помощью методом winfo.
+
+    def new_game(self) -> None:
+        self.destroy()
+        self.__init__()
 
 
 class Snake(tk.Frame):
